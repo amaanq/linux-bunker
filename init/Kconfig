@@ -197,6 +197,10 @@ config BUNKERNEL
 
 	    Default scheduler for SQ..: mq-deadline ->   bfq
 
+	  --- Virtual Memory Subsystem ---------------------------
+
+	    Background-reclaim hugepages...:   no   ->   yes
+
 config BROKEN
 	bool
 	help
