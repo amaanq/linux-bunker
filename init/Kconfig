@@ -208,6 +208,7 @@ config BUNKERNEL
 
 	    Background-reclaim hugepages...:   no   ->   yes
 	    Compact unevictable............:   yes  ->   no
+	    Watermark boost factor.........:   1.5  ->   0
 
 	  --- EEVDF CPU Scheduler --------------------------------
 
