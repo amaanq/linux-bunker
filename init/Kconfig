@@ -207,6 +207,7 @@ config BUNKERNEL
 	  --- Virtual Memory Subsystem ---------------------------
 
 	    Background-reclaim hugepages...:   no   ->   yes
+	    Compact unevictable............:   yes  ->   no
 
 	  --- EEVDF CPU Scheduler --------------------------------
 
