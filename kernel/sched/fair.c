@@ -76,10 +76,19 @@ unsigned int sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_LOG;
  *
  * (default: 0.70 msec * (1 + ilog(ncpus)), units: nanoseconds)
  */
+#ifdef CONFIG_BUNKERNEL
+unsigned int sysctl_sched_base_slice			= 400000ULL;
+static unsigned int normalized_sysctl_sched_base_slice	= 400000ULL;
+#else
 unsigned int sysctl_sched_base_slice			= 700000ULL;
 static unsigned int normalized_sysctl_sched_base_slice	= 700000ULL;
+#endif
 
+#ifdef CONFIG_BUNKERNEL
+__read_mostly unsigned int sysctl_sched_migration_cost	= 300000UL;
+#else
 __read_mostly unsigned int sysctl_sched_migration_cost	= 500000UL;
+#endif
 
 static int __init setup_sched_thermal_decay_shift(char *str)
 {
@@ -122,7 +131,11 @@ int __weak arch_asym_cpu_priority(int cpu)
  *
  * (default: 5 msec, units: microseconds)
  */
+#ifdef CONFIG_BUNKERNEL
+static unsigned int sysctl_sched_cfs_bandwidth_slice		= 3000UL;
+#else
 static unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
+#endif
 #endif
 
 #ifdef CONFIG_NUMA_BALANCING
@@ -2474,11 +2487,8 @@ static void task_numa_find_cpu(struct task_numa_env *env,
 		maymove = !load_too_imbalanced(src_load, dst_load, env);
 	}
 
-	for_each_cpu(cpu, cpumask_of_node(env->dst_nid)) {
-		/* Skip this CPU if the source task cannot migrate */
-		if (!cpumask_test_cpu(cpu, env->p->cpus_ptr))
-			continue;
-
+	/* Skip CPUs if the source task cannot migrate */
+	for_each_cpu_and(cpu, cpumask_of_node(env->dst_nid), env->p->cpus_ptr) {
 		env->dst_cpu = cpu;
 		if (task_numa_compare(env, taskimp, groupimp, maymove))
 			break;
@@ -8412,9 +8422,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
 		int max_spare_cap_cpu = -1;
 		int fits, max_fits = -1;
 
-		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-
-		if (cpumask_empty(cpus))
+		if (!cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask))
 			continue;
 
 		/* Account external pressure for the energy estimation */
