@@ -196,6 +196,7 @@ config EFI_RCI2_TABLE
 
 config EFI_DISABLE_PCI_DMA
        bool "Clear Busmaster bit on PCI bridges during ExitBootServices()"
+       default y
        help
 	  Disable the busmaster bit in the control register on all PCI bridges
 	  while calling ExitBootServices() and passing control to the runtime

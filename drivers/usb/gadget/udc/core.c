@@ -723,6 +723,11 @@ static int usb_gadget_connect_locked(struct usb_gadget *gadget)
 		goto out;
 	}
 
+	if (deny_new_usb) {
+		ret = -EACCES;
+		goto out;
+	}
+
 	ret = gadget->ops->pullup(gadget, 1);
 	if (!ret)
 		gadget->connected = 1;
