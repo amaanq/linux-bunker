@@ -539,6 +539,7 @@ config CROSS_MEMORY_ATTACH
 config AUDIT
 	bool "Auditing support"
 	depends on NET
+	default y
 	help
 	  Enable auditing infrastructure that can be used with another
 	  kernel subsystem, such as SELinux (which requires this for
@@ -1736,9 +1737,8 @@ menuconfig EXPERT
 	  Only use this if you really know what you are doing.
 
 config UID16
-	bool "Enable 16-bit UID system calls" if EXPERT
+	bool "Enable 16-bit UID system calls"
 	depends on HAVE_UID16 && MULTIUSER
-	default y
 	help
 	  This enables the legacy 16-bit UID syscall wrappers.
 
@@ -1924,8 +1924,7 @@ config SHMEM
 	  which may be appropriate on small systems without swap.
 
 config AIO
-	bool "Enable AIO support" if EXPERT
-	default y
+	bool "Enable AIO support"
 	help
 	  This option enables POSIX asynchronous I/O which may by used
 	  by some high performance threaded applications. Disabling

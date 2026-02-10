@@ -196,6 +196,8 @@ int proc_douintvec_conv(const struct ctl_table *table, int write, void *buffer,
 			size_t *lenp, loff_t *ppos,
 			int (*conv)(unsigned long *lvalp, unsigned int *valp,
 				    int write, const struct ctl_table *table));
+int proc_dointvec_minmax_sysadmin(const struct ctl_table *table, int write,
+				  void *buffer, size_t *lenp, loff_t *ppos);
 
 int proc_dou8vec_minmax(const struct ctl_table *table, int write, void *buffer,
 			size_t *lenp, loff_t *ppos);
